@@ -11,6 +11,12 @@ const NavBar = () => {
       <li>
         <NavLink to="/coverage">Coverage</NavLink>
       </li>
+      <li>
+        <NavLink to="/login">Coverage</NavLink>
+      </li>
+      <li>
+        <NavLink to="/register">Coverage</NavLink>
+      </li>
     </>
   );
 

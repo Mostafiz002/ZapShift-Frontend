@@ -9,11 +9,13 @@ const AuthLayout = () => {
       <div>
         <Logo />
       </div>
-      <div>
+      <div className="flex justify-between items-center">
+        <div className="flex-1">
         <Outlet />
       </div>
-      <div>
+      <div className="flex-1">
         <img src={authImg} alt="" />
+      </div>
       </div>
     </div>
   );
