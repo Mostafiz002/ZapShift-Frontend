@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import ErrorMessage from "../../components/ErrorMessage";
+import axios from "axios";
+import GoogleBtn from "../../components/GoogleBtn";
 
 const Register = () => {
   const {
@@ -10,13 +12,38 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { createUser, setUser } = useAuth();
+  const { createUser, updateUser, setUser } = useAuth();
 
   const handleRegistration = (data) => {
+    const profileImg = data.photo[0];
+
     createUser(data.email, data.password)
-      .then((res) => {
-        setUser(res.user);
-        toast.success("Account create successfully");
+      .then(() => {
+        //store the img
+        const formData = new FormData();
+        formData.append("image", profileImg);
+        axios
+          .post(
+            `https://api.imgbb.com/1/upload?key=${
+              import.meta.env.VITE_image_host_key
+            }`,
+            formData
+          )
+          .then((data) => {
+            //update profile
+            const updateProfile = {
+              displayName: data.name,
+              photoURL: data.data.data.url,
+            };
+            updateUser(updateProfile)
+              .then((res) => {
+                setUser(res.user);
+                toast.success("Account create successfully");
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -84,6 +111,7 @@ const Register = () => {
             />
           )}
           <button className="btn btn-neutral mt-4">Register</button>
+          <div><GoogleBtn/></div>
         </fieldset>
       </form>
     </div>

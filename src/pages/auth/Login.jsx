@@ -4,18 +4,23 @@ import ErrorMessage from "../../components/ErrorMessage";
 import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import GoogleBtn from "../../components/GoogleBtn";
+import { useLocation, useNavigate } from "react-router";
 
 const Login = () => {
-  const { signIn } = useAuth();
+  const { signIn, setUser } = useAuth();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleLogin = (data) => {
     signIn(data.email, data.password)
       .then((res) => {
+        navigate(location?.state || "/");
+        setUser(res.user);
         toast.success("Logged in successfully");
       })
       .catch((err) => {
