@@ -3,11 +3,13 @@ import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import useAuth from "../hooks/useAuth";
 
 const SendParcel = () => {
-  const { register, handleSubmit, control, formState = { errors } } = useForm();
+  const { user } = useAuth();
+  const { register, handleSubmit, control } = useForm();
   const serviceCenters = useLoaderData();
-  const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
 
   const regionsDuplicate = serviceCenters.map((s) => s.region);
   const regions = [...new Set(regionsDuplicate)];
@@ -41,9 +43,12 @@ const SendParcel = () => {
         cost = minCharge + extraCharge;
       }
     }
+
+    data.cost = cost;
+
     Swal.fire({
       title: "Are you sure?",
-      text: `Your cost is ${cost}` ,
+      text: `Your cost is ${cost}`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -51,13 +56,13 @@ const SendParcel = () => {
       confirmButtonText: "Yes, Lets do it",
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosSecure.post('/parcel',data).then(res=>{
-          console.log(res.data)
-        })
+        axiosSecure.post("/parcels", data).then((res) => {
+          console.log(res.data);
+        });
 
         Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
+          title: "Success!",
+          text: "Your file has been send.",
           icon: "success",
         });
       }
@@ -130,6 +135,8 @@ const SendParcel = () => {
                 type="text"
                 {...register("senderName")}
                 className="input w-full"
+                readOnly
+                defaultValue={user?.displayName}
                 placeholder="Sender Name"
               />
               {/* sender Email  */}
@@ -137,6 +144,8 @@ const SendParcel = () => {
               <input
                 type="email"
                 {...register("senderEmail")}
+                defaultValue={user?.email}
+                readOnly
                 className="input w-full"
                 placeholder="Sender Email"
               />
@@ -187,10 +196,10 @@ const SendParcel = () => {
           </div>
           {/* receiver  */}
           <div>
-            <h3 className="text-2xl font-semibold">receiver Details</h3>
+            <h3 className="text-2xl font-semibold">Receiver Details</h3>
             <fieldset className="fieldset">
               {/* receiver Name  */}
-              <label className="label">receiver Name</label>
+              <label className="label">Receiver Name</label>
               <input
                 type="text"
                 {...register("receiverName")}
