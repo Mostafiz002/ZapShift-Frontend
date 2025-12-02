@@ -1,114 +1,120 @@
 import React from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import { CiDeliveryTruck } from "react-icons/ci";
+import { MdWorkHistory } from "react-icons/md";
+import { FaMotorcycle, FaTruck, FaUsers } from "react-icons/fa";
+import useRole from "../hooks/useRole";
 
 const DashboardLayout = () => {
+  const { role } = useRole();
+
   return (
-    <div className="drawer lg:drawer-open ">
-      <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content">
-        {/* Navbar */}
-        <nav className="navbar w-full bg-base-300">
+    <div className="drawer lg:drawer-open bg-base-200 min-h-screen">
+      <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
+
+      {/* MAIN CONTENT */}
+      <div className="drawer-content flex flex-col">
+        {/* NAVBAR */}
+        <nav className="navbar bg-white shadow-sm px-4">
           <label
-            htmlFor="my-drawer-4"
-            aria-label="open sidebar"
-            className="btn btn-square btn-ghost"
+            htmlFor="dashboard-drawer"
+            className="btn btn-ghost btn-square lg:hidden"
           >
-            {/* Sidebar toggle icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              strokeLinejoin="round"
-              strokeLinecap="round"
               strokeWidth="2"
-              fill="none"
               stroke="currentColor"
-              className="my-1.5 inline-block size-4"
+              fill="none"
+              className="size-6"
             >
-              <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
-              <path d="M9 4v16"></path>
-              <path d="M14 10l2 2l-2 2"></path>
+              <path d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </label>
-          <div className="px-4">Zap Shift Dashboard</div>
+
+          <h1 className="text-lg font-semibold">Zap Shift Dashboard</h1>
         </nav>
-        {/* Page content here */}
-        <Outlet/>
+
+        <div className="p-6">
+          <Outlet />
+        </div>
       </div>
 
-      <div className="drawer-side is-drawer-close:overflow-visible">
-        <label
-          htmlFor="my-drawer-4"
-          aria-label="close sidebar"
-          className="drawer-overlay"
-        ></label>
-        <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
-          {/* Sidebar content here */}
-          <ul className="menu w-full grow text-white bg-[#1d2939]">
-            {/* List item */}
+      {/* SIDEBAR */}
+      <div className="drawer-side">
+        <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
+
+        <aside className="w-64 bg-[#1d2939] text-white min-h-full flex flex-col">
+          <div className="p-4 font-bold text-xl border-b border-gray-700">
+            Menu
+          </div>
+
+          <ul className="menu text-white p-4 font-medium">
+            {/* HOME */}
             <li>
-              <Link
-                to="/"
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Homepage"
-              >
-                {/* Home icon */}
+              <NavLink to="/" className="flex items-center gap-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
                   strokeWidth="2"
-                  fill="none"
                   stroke="currentColor"
-                  className="my-1.5 inline-block size-4"
+                  fill="none"
+                  className="size-5"
                 >
-                  <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
-                  <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                  <path d="M3 10l9-7l9 7v10a2 2 0 0 1-2 2h-4v-6H9v6H5a2 2 0 0 1-2-2z" />
                 </svg>
-                <span className="is-drawer-close:hidden">Homepage</span>
-              </Link>
-            </li>
-
-            {/* our dashboard links */}
-            <li>
-              <NavLink
-                to="/dashboard/my-parcels"
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="MyParcels"
-              ><CiDeliveryTruck />
-                <span className="is-drawer-close:hidden"> My Parcels</span>
-               
+                Homepage
               </NavLink>
             </li>
 
-            {/* List item */}
+            {/* MY PARCELS */}
             <li>
-              <button
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Settings"
+              <NavLink
+                to="/dashboard/my-parcels"
+                className="flex items-center gap-3"
               >
-                {/* Settings icon */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  strokeWidth="2"
-                  fill="none"
-                  stroke="currentColor"
-                  className="my-1.5 inline-block size-4"
-                >
-                  <path d="M20 7h-9"></path>
-                  <path d="M14 17H5"></path>
-                  <circle cx="17" cy="17" r="3"></circle>
-                  <circle cx="7" cy="7" r="3"></circle>
-                </svg>
-                <span className="is-drawer-close:hidden">Settings</span>
-              </button>
+                <FaTruck className="size-5" />
+                My Parcels
+              </NavLink>
             </li>
+
+            {/* payment history */}
+            <li>
+              <NavLink
+                to="/dashboard/payment-history"
+                className="flex items-center gap-3"
+              >
+                <MdWorkHistory className="size-5" />
+                Payment History
+              </NavLink>
+            </li>
+            {role === "admin" && (
+              <>
+                {" "}
+                {/* approve riders */}
+                <li>
+                  <NavLink
+                    to="/dashboard/approve-riders"
+                    className="flex items-center gap-3"
+                  >
+                    <FaMotorcycle className="size-5" />
+                    Approve Riders
+                  </NavLink>
+                </li>
+                {/* user management */}
+                <li>
+                  <NavLink
+                    to="/dashboard/users-management"
+                    className="flex items-center gap-3"
+                  >
+                    <FaUsers className="size-5" />
+                    Users Management
+                  </NavLink>
+                </li>
+              </>
+            )}
           </ul>
-        </div>
+        </aside>
       </div>
     </div>
   );

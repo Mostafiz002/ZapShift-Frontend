@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 import ErrorMessage from "../../components/ErrorMessage";
 import axios from "axios";
 import GoogleBtn from "../../components/GoogleBtn";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useNavigate } from "react-router";
 
 const Register = () => {
   const {
@@ -13,6 +15,8 @@ const Register = () => {
     formState: { errors },
   } = useForm();
   const { createUser, updateUser, setUser } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
 
   const handleRegistration = (data) => {
     const profileImg = data.photo[0];
@@ -29,20 +33,30 @@ const Register = () => {
             }`,
             formData
           )
-          .then((data) => {
+          .then((res) => {
+            const photoURL = res.data.data.url;
+            //create user in db
+            const userInfo = {
+              email: data.email,
+              displayName: data.name,
+              photoURL: photoURL,
+            };
+            axiosSecure.post("/users", userInfo).then((resp) => {
+              console.log(resp);
+              if (resp.data.insertedId) {
+                console.log("user created in database successfully");
+              }
+            });
             //update profile
             const updateProfile = {
               displayName: data.name,
-              photoURL: data.data.data.url,
+              photoURL: photoURL,
             };
-            updateUser(updateProfile)
-              .then((res) => {
-                setUser(res.user);
-                toast.success("Account create successfully");
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+            updateUser(updateProfile).then(() => {
+              setUser(updateProfile);
+              navigate("/");
+              toast.success("Account create successfully");
+            });
           });
       })
       .catch((err) => {
@@ -111,7 +125,9 @@ const Register = () => {
             />
           )}
           <button className="btn btn-neutral mt-4">Register</button>
-          <div><GoogleBtn/></div>
+          <div>
+            <GoogleBtn />
+          </div>
         </fieldset>
       </form>
     </div>

@@ -7,8 +7,6 @@ import toast from "react-hot-toast";
 const NavBar = () => {
   const { user, logOut, setUser } = useAuth();
 
-  console.log(user);
-
   const handleLogout = () => {
     logOut()
       .then(() => {
@@ -29,7 +27,7 @@ const NavBar = () => {
         <NavLink to="/coverage">Coverage</NavLink>
       </li>
       <li>
-        <NavLink to="/rider">Rider</NavLink>
+        <NavLink to="/rider">Be a Rider</NavLink>
       </li>
       <li>
         <NavLink to="/send-parcel">Send Parcel</NavLink>

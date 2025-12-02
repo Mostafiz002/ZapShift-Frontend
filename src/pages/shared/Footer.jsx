@@ -17,13 +17,13 @@ const Footer = () => {
         
         {/* Left Section */}
         <aside>
-          <Link
+          <span
             onClick={() => window.scrollTo(0, 0)}
             to="/"
             className="text-gray-50"
           >
             <Logo />
-          </Link>
+          </span>
           <p className="max-w-xs text-gray-300 mt-2">
             Discover, collect, and showcase stunning digital artworks from
             creators around the world.

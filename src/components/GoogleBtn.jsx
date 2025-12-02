@@ -2,17 +2,28 @@ import React from "react";
 import useAuth from "../hooks/useAuth";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const GoogleBtn = () => {
-  const { googleSignIn, setUser } = useAuth();
+  const { googleSignIn } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
   const handleGoogleSignin = () => {
     googleSignIn()
       .then((res) => {
-        navigate(location?.state || "/");
-        setUser(res.user);
+        const userInfo = {
+          email: res.user.email,
+          displayName: res.user.displayName,
+          photoURL: res.user.photoURL,
+        };
+
+        axiosSecure.post("/users", userInfo).then((res) => {
+          console.log('user created',res.user)
+          navigate(location?.state || "/");
+        });
+
         toast.success("Successfully login with google");
       })
       .catch((err) => {
