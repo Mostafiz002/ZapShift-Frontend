@@ -22,7 +22,8 @@ const Register = () => {
     const profileImg = data.photo[0];
 
     createUser(data.email, data.password)
-      .then(() => {
+      .then((response) => {
+        const user = response.user
         //store the img
         const formData = new FormData();
         formData.append("image", profileImg);
@@ -42,7 +43,6 @@ const Register = () => {
               photoURL: photoURL,
             };
             axiosSecure.post("/users", userInfo).then((resp) => {
-              console.log(resp);
               if (resp.data.insertedId) {
                 console.log("user created in database successfully");
               }
@@ -53,7 +53,7 @@ const Register = () => {
               photoURL: photoURL,
             };
             updateUser(updateProfile).then(() => {
-              setUser(updateProfile);
+              setUser({...user,updateProfile});
               navigate("/");
               toast.success("Account create successfully");
             });

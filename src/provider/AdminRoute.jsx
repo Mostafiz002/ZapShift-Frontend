@@ -2,8 +2,8 @@ import React from "react";
 import useAuth from "../hooks/useAuth";
 import useRole from "../hooks/useRole";
 
-const AdminRoute = ({children}) => {
-  const {  loading } = useAuth();
+const AdminRoute = ({ children }) => {
+  const { loading } = useAuth();
   const { role, roleLoading } = useRole();
 
   if (loading || roleLoading) {
@@ -22,7 +22,7 @@ const AdminRoute = ({children}) => {
     );
   }
 
-  return children
+  return children;
 };
 
 export default AdminRoute;

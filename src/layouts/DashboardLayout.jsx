@@ -2,11 +2,12 @@ import React from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { MdWorkHistory } from "react-icons/md";
-import { FaMotorcycle, FaTruck, FaUsers } from "react-icons/fa";
+import { FaAddressBook, FaMotorcycle, FaTruck, FaUsers } from "react-icons/fa";
 import useRole from "../hooks/useRole";
 
 const DashboardLayout = () => {
   const { role } = useRole();
+  console.log('from dashboard',role)
 
   return (
     <div className="drawer lg:drawer-open bg-base-200 min-h-screen">
@@ -109,6 +110,16 @@ const DashboardLayout = () => {
                   >
                     <FaUsers className="size-5" />
                     Users Management
+                  </NavLink>
+                </li>
+                {/* assign riders */}
+                <li>
+                  <NavLink
+                    to="/dashboard/assign-riders"
+                    className="flex items-center gap-3"
+                  >
+                    <FaAddressBook className="size-5" />
+                    Assign Riders
                   </NavLink>
                 </li>
               </>
